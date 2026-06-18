@@ -574,7 +574,7 @@ items: [
                 totalFees += 200;
             }
             if (document.getElementById('feeHomeService').checked) {
-                totalFees += 200;
+                totalFees += 500;
             }
             if (document.getElementById('feeTransportation').checked) {
                 var transportAmount = parseFloat(document.getElementById('transportationAmount').value) || 0;
@@ -582,6 +582,16 @@ items: [
             }
             
             return totalFees;
+        }
+
+        function hasSelectedFees() {
+            return document.getElementById('feeReservation').checked
+                || document.getElementById('feeCancellation').checked
+                || (document.getElementById('feeLate').checked && document.querySelector('input[name="lateFee"]:checked') !== null)
+                || document.getElementById('feeLateNight').checked
+                || document.getElementById('feeLastMinute').checked
+                || document.getElementById('feeHomeService').checked
+                || document.getElementById('feeTransportation').checked;
         }
 
         // Update receipt with fees
@@ -680,8 +690,9 @@ items: [
             var receiptItemsEl = document.getElementById('receiptItems');
             var receiptTotalEl = document.getElementById('receiptTotal');
             var totalAmountEl = document.getElementById('totalAmount');
+            var hasFees = hasSelectedFees();
 
-            if (receiptItems.length === 0) {
+            if (receiptItems.length === 0 && !hasFees) {
                 receiptItemsEl.innerHTML = `
                     <div class="empty-state">
                         <div>No services selected yet</div>
@@ -744,7 +755,7 @@ items: [
                 feesHtml += `<div class="receipt-item"><span>Last Minute Booking Fee</span><span>₱200.00</span></div>`;
             }
             if (document.getElementById('feeHomeService').checked) {
-                feesHtml += `<div class="receipt-item"><span>Home Service Fee</span><span>₱200.00</span></div>`;
+                feesHtml += `<div class="receipt-item"><span>Home Service Fee</span><span>₱500.00</span></div>`;
             }
             if (document.getElementById('feeTransportation').checked) {
                 var transportAmount = parseFloat(document.getElementById('transportationAmount').value) || 0;
@@ -778,8 +789,8 @@ items: [
 
         // Print receipt
         function printReceipt() {
-            if (receiptItems.length === 0) {
-                alert('Please add some services first!');
+            if (receiptItems.length === 0 && !hasSelectedFees()) {
+                alert('Please add some services or select at least one fee first!');
                 return;
             }
 
