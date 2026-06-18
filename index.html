@@ -388,7 +388,11 @@
             <div style="margin-bottom: 20px;">
                 <div style="margin-bottom: 12px;">
                     <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">Quotation No.:</label>
-                    <input type="text" id="quotationNumber" placeholder="Enter quotation number" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;">
+                    <input type="text" id="quotationNumber" readonly style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; background: #f4f4f4;">
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">Receipt No.:</label>
+                    <input type="text" id="receiptNumber" readonly style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; background: #f4f4f4;">
                 </div>
                 <div style="margin-bottom: 12px;">
                     <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #333;">Client Name:</label>
@@ -416,7 +420,8 @@
             </div>
             <div class="controls">
                 <button class="btn btn-secondary" onclick="clearReceipt()">🗑️ Clear All</button>
-                <button class="btn btn-primary" onclick="printReceipt()">🖨️ Print Quotation</button>
+                <button class="btn btn-primary" onclick="printDocument('QUOTATION')">🖨️ Print Quotation</button>
+                <button class="btn btn-primary" onclick="printDocument('RECEIPT')">🧾 Print Receipt</button>
             </div>
         </div>
     </div>
@@ -427,81 +432,76 @@ var services = [
 {
 category: "Gel Manicure",
 items: [
-{ id: 1, name: "XS", price: "₱349" },
-{ id: 2, name: "S", price: "₱399" },
-{ id: 3, name: "M", price: "₱449" },
-{ id: 4, name: "ML", price: "₱499" },
-{ id: 5, name: "L", price: "₱549" },
-{ id: 6, name: "XL", price: "₱599" },
-{ id: 7, name: "XXL", price: "₱649" }
-]
-},
-{
-category: "Structured Builder Gel",
-items: [
-{ id: 8, name: "XS", price: "₱449" },
-{ id: 9, name: "S", price: "₱499" },
-{ id: 10, name: "M", price: "₱549" }
+{ id: 1, name: "XS - Gel Mani", price: "₱399" },
+{ id: 2, name: "S - Gel Mani", price: "₱449" },
+{ id: 3, name: "M - Gel Mani", price: "₱499" },
+{ id: 4, name: "ML - Gel Mani", price: "₱549" },
+{ id: 5, name: "L - Gel Mani", price: "₱599" },
+{ id: 6, name: "XL - Gel Mani", price: "₱649" },
+{ id: 7, name: "XXL - Gel Mani", price: "₱699" }
 ]
 },
 {
 category: "Softgel Extensions",
 items: [
-{ id: 11, name: "XS", price: "₱499" },
-{ id: 12, name: "S", price: "₱549" },
-{ id: 13, name: "M", price: "₱599" },
-{ id: 14, name: "ML", price: "₱649" },
-{ id: 15, name: "L", price: "₱699" },
-{ id: 16, name: "XL", price: "₱749" },
-{ id: 17, name: "XXL", price: "₱799" }
+{ id: 8, name: "XS - Gel X", price: "₱599" },
+{ id: 9, name: "S - Gel X", price: "₱649" },
+{ id: 10, name: "M - Gel X", price: "₱699" },
+{ id: 11, name: "ML - Gel X", price: "₱749" },
+{ id: 12, name: "L - Gel X", price: "₱799" },
+{ id: 13, name: "XL - Gel X", price: "₱849" },
+{ id: 14, name: "XXL - Gel X", price: "₱899" }
 ]
 },
 {
 category: "Hard Gel Overlay",
 items: [
-{ id: 18, name: "M", price: "₱699" },
-{ id: 19, name: "ML", price: "₱749" },
-{ id: 20, name: "L", price: "₱799" },
-{ id: 21, name: "XL", price: "₱849" },
-{ id: 22, name: "XXL", price: "₱899" }
+{ id: 15, name: "XS - Hard Gel Overlay", price: "₱699" },
+{ id: 16, name: "S - Hard Gel Overlay", price: "₱749" },
+{ id: 17, name: "M - Hard Gel Overlay", price: "₱799" },
+{ id: 18, name: "ML - Hard Gel Overlay", price: "₱849" },
+{ id: 19, name: "L - Hard Gel Overlay", price: "₱899" },
+{ id: 20, name: "XL - Hard Gel Overlay", price: "₱949" },
+{ id: 21, name: "XXL - Hard Gel Overlay", price: "₱999" }
 ]
 },
 {
 category: "Hard Gel Extensions",
 items: [
-{ id: 23, name: "XS", price: "₱799" },
-{ id: 24, name: "S", price: "₱849" },
-{ id: 25, name: "M", price: "₱899" },
-{ id: 26, name: "ML", price: "₱949" },
-{ id: 27, name: "L", price: "₱999" },
-{ id: 28, name: "XL", price: "₱1049" },
-{ id: 29, name: "XXL", price: "₱1199" }
+{ id: 22, name: "XS", price: "₱799" },
+{ id: 23, name: "S", price: "₱849" },
+{ id: 24, name: "M", price: "₱899" },
+{ id: 25, name: "ML", price: "₱949" },
+{ id: 26, name: "L", price: "₱999" },
+{ id: 27, name: "XL", price: "₱1049" },
+{ id: 28, name: "XXL", price: "₱1199" }
 ]
 },
 {
 category: "Nail Art (Per Nail)",
 items: [
-{ id: 30, name: "3D Flower (Partial)", price: "₱49" },
-{ id: 31, name: "3D Flower (Detailed)", price: "₱99" },
-{ id: 32, name: "3D Line / Wobble", price: "₱39" },
-{ id: 33, name: "3D Mermaid / Shell", price: "₱69" },
-{ id: 34, name: "French Tip", price: "₱34" },
-{ id: 35, name: "Ombre", price: "₱29" },
-{ id: 36, name: "Aura", price: "₱24" },
-{ id: 37, name: "Chrome (Powder)", price: "₱39" },
-{ id: 38, name: "Chrome (Metallic)", price: "₱24" },
-{ id: 39, name: "Decals (Foils & Stickers)", price: "₱19" },
-{ id: 40, name: "Hand Paint (Easy)", price: "₱39" },
-{ id: 41, name: "Hand Paint (Intricate)", price: "₱49" },
-{ id: 42, name: "Dots / Lines (Simple)", price: "₱19" },
-{ id: 43, name: "Outline / Shapes", price: "₱29" },
-{ id: 44, name: "Blooming", price: "₱29" },
-{ id: 45, name: "Marble", price: "₱24" },
-{ id: 46, name: "Loose Glitters", price: "₱29" },
-{ id: 47, name: "Paint Glitters", price: "₱19" },
-{ id: 48, name: "Encapsulation", price: "₱69" },
-{ id: 49, name: "Embossed", price: "₱39" },
-{ id: 50, name: "Cat Eye", price: "₱39" }
+{ id: 29, name: "3D Flower (Partial)", price: "₱49" },
+{ id: 30, name: "3D Flower (Detailed)", price: "₱99" },
+{ id: 31, name: "3D Line / Wobble", price: "₱39" },
+{ id: 32, name: "3D Mermaid / Shell", price: "₱69" },
+{ id: 33, name: "French Tip", price: "₱34" },
+{ id: 34, name: "Ombre", price: "₱29" },
+{ id: 35, name: "Aura", price: "₱24" },
+{ id: 36, name: "Chrome (Powder)", price: "₱39" },
+{ id: 37, name: "Chrome (Metallic)", price: "₱24" },
+{ id: 38, name: "Decals (Foils & Stickers)", price: "₱19" },
+{ id: 39, name: "Hand Paint (Easy)", price: "₱39" },
+{ id: 40, name: "Hand Paint (Intricate)", price: "₱49" },
+{ id: 41, name: "Dots / Lines (Simple)", price: "₱19" },
+{ id: 42, name: "Outline / Shapes", price: "₱29" },
+{ id: 43, name: "Blooming", price: "₱29" },
+{ id: 44, name: "Marble", price: "₱24" },
+{ id: 45, name: "Loose Glitters", price: "₱29" },
+{ id: 46, name: "Paint Glitters", price: "₱19" },
+{ id: 47, name: "Encapsulation", price: "₱69" },
+{ id: 48, name: "Embossed", price: "₱39" },
+{ id: 49, name: "Cat Eye", price: "₱39" },
+{ id: 50, name: "Tortoise", price: "₱39" }
 ]
 },
 {
@@ -535,6 +535,53 @@ items: [
 ];
 
         var receiptItems = [];
+        var initialQuotationNumber = 202312170000000;
+        var initialReceiptNumber = 1217202300000;
+        var currentQuotationNumber = loadStoredNumber('quotationNumber', initialQuotationNumber);
+        var currentReceiptNumber = loadStoredNumber('receiptNumber', initialReceiptNumber);
+
+        function loadStoredNumber(key, fallback) {
+            try {
+                var saved = localStorage.getItem(key);
+                return saved !== null ? Number(saved) : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function saveStoredNumbers() {
+            try {
+                localStorage.setItem('quotationNumber', String(currentQuotationNumber));
+                localStorage.setItem('receiptNumber', String(currentReceiptNumber));
+            } catch (error) {
+                // ignore storage errors
+            }
+        }
+
+        function updateNumberFields() {
+            var quotationInput = document.getElementById('quotationNumber');
+            var receiptInput = document.getElementById('receiptNumber');
+            if (quotationInput) {
+                quotationInput.value = currentQuotationNumber;
+            }
+            if (receiptInput) {
+                receiptInput.value = currentReceiptNumber;
+            }
+        }
+
+        function getDocumentNumber(docType) {
+            return docType === 'RECEIPT' ? currentReceiptNumber : currentQuotationNumber;
+        }
+
+        function incrementDocumentNumber(docType) {
+            if (docType === 'RECEIPT') {
+                currentReceiptNumber += 1;
+            } else {
+                currentQuotationNumber += 1;
+            }
+            saveStoredNumbers();
+            updateNumberFields();
+        }
 
         function formatPrice(value) {
             if (typeof value === 'number') {
@@ -601,9 +648,8 @@ items: [
 
         // Initialize the app
         function init() {
-            alert('App initialized');
-            console.log('App initialized, services count:', services.length);
             renderServices();
+            updateNumberFields();
         }
 
         // Render service buttons
@@ -787,15 +833,15 @@ items: [
             renderReceipt();
         }
 
-        // Print receipt
-        function printReceipt() {
+        // Print document (quotation or receipt)
+        function printDocument(docType) {
             if (receiptItems.length === 0 && !hasSelectedFees()) {
                 alert('Please add some services or select at least one fee first!');
                 return;
             }
 
-            // GET QUOTATION DETAILS FROM INPUTS
-            var quotationNumber = document.getElementById('quotationNumber').value || '-';
+            // GET DOCUMENT DETAILS FROM INPUTS
+            var documentNumber = getDocumentNumber(docType);
             var clientName = document.getElementById('clientName').value || '-';
             var clientContact = document.getElementById('clientContact').value || '-';
             var discountAmount = Number(document.getElementById('discountAmount').value) || 0;
@@ -890,7 +936,7 @@ items: [
                 feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Last Minute Booking Fee</span><span>₱200.00</span></div>`;
             }
             if (document.getElementById('feeHomeService').checked) {
-                feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Home Service Fee</span><span>₱200.00</span></div>`;
+                feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Home Service Fee</span><span>₱500.00</span></div>`;
             }
             if (document.getElementById('feeTransportation').checked) {
                 var transportAmount = parseFloat(document.getElementById('transportationAmount').value) || 0;
@@ -913,13 +959,13 @@ items: [
 
     <!-- TITLE -->
     <div style="text-align: center; margin-bottom: 10px;">
-        <h3 style="margin: 5px 0;">QUOTATION</h3>
+        <h3 style="margin: 5px 0;">${docType === 'RECEIPT' ? 'CUSTOMER RECEIPT' : 'QUOTATION'}</h3>
         <p style="font-size: 12px;">Date: ${formattedDate}</p>
     </div>
 
     <!-- CLIENT INFO -->
     <div style="margin-bottom: 15px; font-size: 13px;">
-        <p>Quotation No.: ${quotationNumber}</p>
+        <p>${docType === 'RECEIPT' ? 'Receipt No.' : 'Quotation No.'}: ${documentNumber}</p>
         <p>Valid Until: 1 week from issue date</p>
         <p>Client Name: ${clientName}</p>
         <p>Contact No.: ${clientContact}</p>
@@ -976,12 +1022,13 @@ items: [
             var printWindow = window.open('', '_blank');
             printWindow.document.write(`
                 <html>
-                    <head><title>Quotation - Mingsha Luxe Nail Studio</title></head>
+                    <head><title>${docType === 'RECEIPT' ? 'Receipt' : 'Quotation'} - Mingsha Luxe Nail Studio</title></head>
                     <body>${printContent}</body>
                 </html>
             `);
             printWindow.document.close();
             printWindow.print();
+            incrementDocumentNumber(docType);
         }
 
         // Initialize app when page loads
