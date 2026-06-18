@@ -887,8 +887,8 @@ items: [
                 discount = subtotal + fees;
             }
 
-            // TAX (8%)
-            var taxRate = 0.08;
+            // TAX (8%) only for receipts
+            var taxRate = docType === 'RECEIPT' ? 0.08 : 0;
             var tax = ((subtotal + fees) - discount) * taxRate;
 
             // TOTAL
@@ -986,10 +986,12 @@ items: [
             <span>Discount:</span>
             <span>${formatPrice(discount)}</span>
         </div>
+        ${docType === 'RECEIPT' ? `
         <div style="display: flex; justify-content: space-between;">
             <span>Tax (8%):</span>
             <span>${formatPrice(tax)}</span>
         </div>
+        ` : ''}
         <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1em; margin-top: 8px;">
             <span>Total:</span>
             <span>${formatPrice(total)}</span>
