@@ -311,6 +311,72 @@
         </div>
 
         <div class="services-section">
+            <!-- FEES SECTION -->
+            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                <h2 style="font-size: 1.2rem; color: #856404; margin-bottom: 15px; display: flex; align-items: center;">
+                    <span style="font-size: 1.5rem; margin-right: 10px;">💰</span>
+                    <span>ADDITIONAL FEES (SELECT IF APPLICABLE)</span>
+                </h2>
+                
+                <div style="font-size: 0.95rem; color: #333; line-height: 1.6;">
+                    <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #ffc107; display: flex; align-items: center;">
+                        <input type="checkbox" id="feeReservation" onchange="updateTotalWithFees()" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer;">
+                        <label for="feeReservation" style="cursor: pointer;"><strong>Reservation Fee:</strong> ₱200 (First Time Client)</label>
+                    </div>
+                    
+                    <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #ffc107; display: flex; align-items: center;">
+                        <input type="checkbox" id="feeCancellation" onchange="updateTotalWithFees()" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer;">
+                        <label for="feeCancellation" style="cursor: pointer;"><strong>Cancellation Fee:</strong> ₱250</label>
+                    </div>
+                    
+                    <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #ffc107;">
+                        <div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
+                            <input type="checkbox" id="feeLate" onchange="updateTotalWithFees()" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer; margin-top: 2px;">
+                            <label for="feeLate" style="cursor: pointer;"><strong>Late Fee</strong></label>
+                        </div>
+                        <div style="margin-left: 28px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="radio" name="lateFee" value="100" onchange="updateTotalWithFees()" style="cursor: pointer;">
+                                5-10 mins: ₱100
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="radio" name="lateFee" value="150" onchange="updateTotalWithFees()" style="cursor: pointer;">
+                                11-15 mins: ₱150
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="radio" name="lateFee" value="200" onchange="updateTotalWithFees()" style="cursor: pointer;">
+                                16-20 mins: ₱200
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="radio" name="lateFee" value="250" onchange="updateTotalWithFees()" style="cursor: pointer;">
+                                21-29 mins: ₱250
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #ffc107; display: flex; align-items: center;">
+                        <input type="checkbox" id="feeLateNight" onchange="updateTotalWithFees()" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer;">
+                        <label for="feeLateNight" style="cursor: pointer;"><strong>Late Night Glam Fee:</strong> ₱300 per appointment (8:00 PM - 6:00 AM)</label>
+                    </div>
+                    
+                    <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #ffc107; display: flex; align-items: center;">
+                        <input type="checkbox" id="feeLastMinute" onchange="updateTotalWithFees()" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer;">
+                        <label for="feeLastMinute" style="cursor: pointer;"><strong>Last Minute Booking (Same Day):</strong> ₱200</label>
+                    </div>
+                    
+                    <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #ffc107; display: flex; align-items: center;">
+                        <input type="checkbox" id="feeHomeService" onchange="updateTotalWithFees()" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer;">
+                        <label for="feeHomeService" style="cursor: pointer;"><strong>Home Service Fee (1-3 clients):</strong> ₱200</label>
+                    </div>
+                    
+                    <div style="margin-bottom: 12px; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="feeTransportation" onchange="updateTotalWithFees()" style="margin-right: 0px; width: 18px; height: 18px; cursor: pointer;">
+                        <label for="feeTransportation" style="cursor: pointer; white-space: nowrap;"><strong>Transportation Fee:</strong></label>
+                        <input type="number" id="transportationAmount" placeholder="Enter amount" onchange="updateTotalWithFees()" style="width: 120px; padding: 6px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem;" min="0" step="10">
+                    </div>
+                </div>
+            </div>
+
             <h2 class="section-title">Available Services</h2>
             <div class="service-grid" id="serviceGrid">
                 <!-- Services will be populated by JavaScript -->
@@ -485,6 +551,44 @@ items: [
             return parseFloat(String(item.price).replace(/[^0-9.-]+/g, '')) || 0;
         }
 
+        // Calculate selected fees
+        function calculateFees() {
+            var totalFees = 0;
+            
+            if (document.getElementById('feeReservation').checked) {
+                totalFees += 200;
+            }
+            if (document.getElementById('feeCancellation').checked) {
+                totalFees += 250;
+            }
+            if (document.getElementById('feeLate').checked) {
+                var selectedLateFee = document.querySelector('input[name="lateFee"]:checked');
+                if (selectedLateFee) {
+                    totalFees += parseInt(selectedLateFee.value);
+                }
+            }
+            if (document.getElementById('feeLateNight').checked) {
+                totalFees += 300;
+            }
+            if (document.getElementById('feeLastMinute').checked) {
+                totalFees += 200;
+            }
+            if (document.getElementById('feeHomeService').checked) {
+                totalFees += 200;
+            }
+            if (document.getElementById('feeTransportation').checked) {
+                var transportAmount = parseFloat(document.getElementById('transportationAmount').value) || 0;
+                totalFees += transportAmount;
+            }
+            
+            return totalFees;
+        }
+
+        // Update receipt with fees
+        function updateTotalWithFees() {
+            renderReceipt();
+        }
+
         // Initialize the app
         function init() {
             alert('App initialized');
@@ -593,8 +697,12 @@ items: [
             for (var i = 0; i < receiptItems.length; i++) {
                 subtotal += receiptItems[i].price * receiptItems[i].quantity;
             }
-            var tax = subtotal * 0.08; // 8% tax
-            var total = subtotal + tax;
+
+            // Calculate fees
+            var fees = calculateFees();
+
+            var tax = (subtotal + fees) * 0.08; // 8% tax on subtotal + fees
+            var total = subtotal + fees + tax;
 
             var receiptHtml = '';
             for (var j = 0; j < receiptItems.length; j++) {
@@ -614,10 +722,39 @@ items: [
                 `;
             }
 
-            receiptItemsEl.innerHTML = receiptHtml + `
+            // Add fees to receipt display
+            var feesHtml = '';
+            if (document.getElementById('feeReservation').checked) {
+                feesHtml += `<div class="receipt-item"><span>Reservation Fee</span><span>₱200.00</span></div>`;
+            }
+            if (document.getElementById('feeCancellation').checked) {
+                feesHtml += `<div class="receipt-item"><span>Cancellation Fee</span><span>₱250.00</span></div>`;
+            }
+            if (document.getElementById('feeLate').checked) {
+                var selectedLateFee = document.querySelector('input[name="lateFee"]:checked');
+                if (selectedLateFee) {
+                    var lateFeeValue = parseInt(selectedLateFee.value);
+                    feesHtml += `<div class="receipt-item"><span>Late Fee</span><span>₱${lateFeeValue}.00</span></div>`;
+                }
+            }
+            if (document.getElementById('feeLateNight').checked) {
+                feesHtml += `<div class="receipt-item"><span>Late Night Glam Fee</span><span>₱300.00</span></div>`;
+            }
+            if (document.getElementById('feeLastMinute').checked) {
+                feesHtml += `<div class="receipt-item"><span>Last Minute Booking Fee</span><span>₱200.00</span></div>`;
+            }
+            if (document.getElementById('feeHomeService').checked) {
+                feesHtml += `<div class="receipt-item"><span>Home Service Fee</span><span>₱200.00</span></div>`;
+            }
+            if (document.getElementById('feeTransportation').checked) {
+                var transportAmount = parseFloat(document.getElementById('transportationAmount').value) || 0;
+                feesHtml += `<div class="receipt-item"><span>Transportation Fee</span><span>₱${transportAmount.toFixed(2)}</span></div>`;
+            }
+
+            receiptItemsEl.innerHTML = receiptHtml + feesHtml + `
                 <div class="receipt-item">
                     <span><strong>Subtotal</strong></span>
-                    <span><strong>${formatPrice(subtotal)}</strong></span>
+                    <span><strong>${formatPrice(subtotal + fees)}</strong></span>
                 </div>
                 <div class="receipt-item">
                     <span>Tax (8%)</span>
@@ -671,6 +808,9 @@ items: [
                 subtotal += price * qty;
             }
 
+            // CALCULATE FEES
+            var fees = calculateFees();
+
             // DISCOUNT SAFE (supports amount OR percentage)
             var discountInputRaw = document.getElementById('discountAmount').value || '';
             var discount = 0;
@@ -678,7 +818,7 @@ items: [
 
             if (discountInput.indexOf('%') !== -1) {
                 var percentValue = parseFloat(discountInput.replace('%', '')) || 0;
-                discount = subtotal * (percentValue / 100);
+                discount = (subtotal + fees) * (percentValue / 100);
             } else {
                 discount = parseFloat(discountInput) || 0;
             }
@@ -686,16 +826,16 @@ items: [
             if (discount < 0) {
                 discount = 0;
             }
-            if (discount > subtotal) {
-                discount = subtotal;
+            if (discount > (subtotal + fees)) {
+                discount = subtotal + fees;
             }
 
             // TAX (8%)
             var taxRate = 0.08;
-            var tax = (subtotal - discount) * taxRate;
+            var tax = ((subtotal + fees) - discount) * taxRate;
 
             // TOTAL
-            var total = (subtotal - discount) + tax;
+            var total = ((subtotal + fees) - discount) + tax;
 
             // FORMAT PRICE
             function formatPrice(value) {
@@ -715,6 +855,35 @@ items: [
                         <span>${formatPrice(price * qty)}</span>
                     </div>
                 `;
+            }
+
+            // FEES HTML
+            var feesHtml = '';
+            if (document.getElementById('feeReservation').checked) {
+                feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Reservation Fee</span><span>₱200.00</span></div>`;
+            }
+            if (document.getElementById('feeCancellation').checked) {
+                feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Cancellation Fee</span><span>₱250.00</span></div>`;
+            }
+            if (document.getElementById('feeLate').checked) {
+                var selectedLateFee = document.querySelector('input[name="lateFee"]:checked');
+                if (selectedLateFee) {
+                    var lateFeeValue = parseInt(selectedLateFee.value);
+                    feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Late Fee</span><span>₱${lateFeeValue}.00</span></div>`;
+                }
+            }
+            if (document.getElementById('feeLateNight').checked) {
+                feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Late Night Glam Fee</span><span>₱300.00</span></div>`;
+            }
+            if (document.getElementById('feeLastMinute').checked) {
+                feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Last Minute Booking Fee</span><span>₱200.00</span></div>`;
+            }
+            if (document.getElementById('feeHomeService').checked) {
+                feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Home Service Fee</span><span>₱200.00</span></div>`;
+            }
+            if (document.getElementById('feeTransportation').checked) {
+                var transportAmount = parseFloat(document.getElementById('transportationAmount').value) || 0;
+                feesHtml += `<div style="display: flex; justify-content: space-between; padding: 6px 0; color: #555;"><span>Transportation Fee</span><span>₱${transportAmount.toFixed(2)}</span></div>`;
             }
 
             // PRINT CONTENT
@@ -748,12 +917,13 @@ items: [
     <!-- ITEMS -->
     <p style="margin: 2px 0; font-weight: bold; font-size: 20px;">Services</p>
     ${itemsHtml}
+    ${feesHtml ? '<p style="margin: 10px 0 0 0; font-weight: bold; font-size: 13px; color: #333;">Additional Fees</p>' + feesHtml : ''}
 
     <!-- SUMMARY -->
     <div style="border-top: 1px solid #ccc; padding-top: 10px; margin-top: 15px; font-size: 13px;">
         <div style="display: flex; justify-content: space-between;">
             <span>Subtotal:</span>
-            <span>${formatPrice(subtotal)}</span>
+            <span>${formatPrice(subtotal + fees)}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
             <span>Discount:</span>
@@ -779,9 +949,7 @@ items: [
     </div>
 
     <!-- SIGNATURE -->
-
-
-<div style="margin-top: 20px; font-size: 12px;">
+    <div style="margin-top: 20px; font-size: 12px;">
         <p>Prepared by: Eddessa Edquiban</p>
         <p>Approved by: MingshaLuxe CEO</p>
     </div>
