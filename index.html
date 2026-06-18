@@ -811,7 +811,11 @@ items: [
             receiptItemsEl.innerHTML = receiptHtml + feesHtml + `
                 <div class="receipt-item">
                     <span><strong>Subtotal</strong></span>
-                    <span><strong>${formatPrice(subtotal + fees)}</strong></span>
+                    <span><strong>${formatPrice(subtotal)}</strong></span>
+                </div>
+                <div class="receipt-item">
+                    <span>Additional Fees</span>
+                    <span>${formatPrice(fees)}</span>
                 </div>
                 <div class="receipt-item">
                     <span>Tax (8%)</span>
@@ -980,7 +984,7 @@ items: [
     <div style="border-top: 1px solid #ccc; padding-top: 10px; margin-top: 15px; font-size: 13px;">
         <div style="display: flex; justify-content: space-between;">
             <span>Subtotal:</span>
-            <span>${formatPrice(subtotal + fees)}</span>
+            <span>${formatPrice(subtotal)}</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
             <span>Discount:</span>
