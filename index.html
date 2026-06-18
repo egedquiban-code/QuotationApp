@@ -986,6 +986,10 @@ items: [
             <span>Discount:</span>
             <span>${formatPrice(discount)}</span>
         </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span>Additional Fees:</span>
+            <span>${formatPrice(fees)}</span>
+        </div>
         ${docType === 'RECEIPT' ? `
         <div style="display: flex; justify-content: space-between;">
             <span>Tax (8%):</span>
