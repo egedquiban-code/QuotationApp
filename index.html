@@ -757,9 +757,13 @@ items: [
 
             // Calculate fees
             var fees = calculateFees();
+            
+            // Reservation fee is deductible (credit towards services)
+            var reservationFeeDeduction = document.getElementById('feeReservation').checked ? 200 : 0;
+            var otherFees = fees - reservationFeeDeduction;
 
-            var tax = (subtotal + fees) * 0.08; // 8% tax on subtotal + fees
-            var total = subtotal + fees + tax;
+            var tax = (subtotal + otherFees - reservationFeeDeduction) * 0.08; // 8% tax
+            var total = subtotal + otherFees - reservationFeeDeduction + tax;
 
             var receiptHtml = '';
             for (var j = 0; j < receiptItems.length; j++) {
@@ -808,20 +812,36 @@ items: [
                 feesHtml += `<div class="receipt-item"><span>Transportation Fee</span><span>₱${transportAmount.toFixed(2)}</span></div>`;
             }
 
-            receiptItemsEl.innerHTML = receiptHtml + feesHtml + `
+            var summaryHtml = `
                 <div class="receipt-item">
                     <span><strong>Subtotal</strong></span>
                     <span><strong>${formatPrice(subtotal)}</strong></span>
                 </div>
+            `;
+            if (reservationFeeDeduction > 0) {
+                summaryHtml += `
+                <div class="receipt-item">
+                    <span>Reservation Fee (Credit)</span>
+                    <span>-${formatPrice(reservationFeeDeduction)}</span>
+                </div>
+            `;
+            }
+            if (otherFees > 0) {
+                summaryHtml += `
                 <div class="receipt-item">
                     <span>Additional Fees</span>
-                    <span>${formatPrice(fees)}</span>
+                    <span>${formatPrice(otherFees)}</span>
                 </div>
+            `;
+            }
+            summaryHtml += `
                 <div class="receipt-item">
                     <span>Tax (8%)</span>
                     <span>${formatPrice(tax)}</span>
                 </div>
             `;
+            
+            receiptItemsEl.innerHTML = receiptHtml + feesHtml + summaryHtml;
 
             totalAmountEl.textContent = total.toFixed(2);
             receiptTotalEl.style.display = 'block';
@@ -871,6 +891,10 @@ items: [
 
             // CALCULATE FEES
             var fees = calculateFees();
+            
+            // Reservation fee is deductible (credit towards services)
+            var reservationFeeDeduction = document.getElementById('feeReservation').checked ? 200 : 0;
+            var otherFees = fees - reservationFeeDeduction;
 
             // DISCOUNT SAFE (supports amount OR percentage)
             var discountInputRaw = document.getElementById('discountAmount').value || '';
@@ -879,7 +903,7 @@ items: [
 
             if (discountInput.indexOf('%') !== -1) {
                 var percentValue = parseFloat(discountInput.replace('%', '')) || 0;
-                discount = (subtotal + fees) * (percentValue / 100);
+                discount = (subtotal + otherFees - reservationFeeDeduction) * (percentValue / 100);
             } else {
                 discount = parseFloat(discountInput) || 0;
             }
@@ -887,16 +911,16 @@ items: [
             if (discount < 0) {
                 discount = 0;
             }
-            if (discount > (subtotal + fees)) {
-                discount = subtotal + fees;
+            if (discount > (subtotal + otherFees - reservationFeeDeduction)) {
+                discount = subtotal + otherFees - reservationFeeDeduction;
             }
 
             // TAX (8%) only for receipts
             var taxRate = docType === 'RECEIPT' ? 0.08 : 0;
-            var tax = ((subtotal + fees) - discount) * taxRate;
+            var tax = ((subtotal + otherFees - reservationFeeDeduction) - discount) * taxRate;
 
             // TOTAL
-            var total = ((subtotal + fees) - discount) + tax;
+            var total = ((subtotal + otherFees - reservationFeeDeduction) - discount) + tax;
 
             // FORMAT PRICE
             function formatPrice(value) {
@@ -986,14 +1010,22 @@ items: [
             <span>Subtotal:</span>
             <span>${formatPrice(subtotal)}</span>
         </div>
+        ${reservationFeeDeduction > 0 ? `
+        <div style="display: flex; justify-content: space-between;">
+            <span>Reservation Fee (Credit):</span>
+            <span>-${formatPrice(reservationFeeDeduction)}</span>
+        </div>
+        ` : ''}
         <div style="display: flex; justify-content: space-between;">
             <span>Discount:</span>
             <span>${formatPrice(discount)}</span>
         </div>
+        ${otherFees > 0 ? `
         <div style="display: flex; justify-content: space-between;">
             <span>Additional Fees:</span>
-            <span>${formatPrice(fees)}</span>
+            <span>${formatPrice(otherFees)}</span>
         </div>
+        ` : ''}
         ${docType === 'RECEIPT' ? `
         <div style="display: flex; justify-content: space-between;">
             <span>Tax (8%):</span>
